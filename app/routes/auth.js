@@ -34,8 +34,9 @@ module.exports = function (app, passport) {
 
 
     app.get('/dashboard', isLoggedIn, authController.dashboard);
-   
 
+
+    app.get('/api/logout', authController.logout);
 
     app.get('/logout', authController.logout);
 
@@ -81,7 +82,7 @@ module.exports = function (app, passport) {
         return text;
     }
 
-    function displayUserName(req, res){
+    function displayUserName(req, res) {
         model.user.findOne({
             where: {
                 id: req.user.id

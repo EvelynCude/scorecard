@@ -1,212 +1,273 @@
 <!DOCTYPE html>
 <html>
-  <head>
-		<title>Game</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/assets/css/style.css" type="text/css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
-	</head>
-  <body>
+
+<head>
+    <title>Game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/game.css" type="text/css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+</head>
+
+<body>
     <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
-          <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>                        
-              </button>
-              <a class="navbar-brand" href="#">disc-golf-scorecard</a>
-          </div>
-          <div class="collapse navbar-collapse" id="myNavbar">
-              <ul class="nav navbar-nav navbar-right">
-                  <li><a href="scoreboard">End Game</a></li>
-                  <li><a href="logout">Log Out</a></li>
-              </ul>
-          </div>
-      </div>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Score Keeper</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#code" data-toggle="modal" data-target="#myModal"><span id="modal">Progress Report</span></a>
+                    </li>
+                    <li>
+                        <a href="/scoreboard">Save Game</a>
+                    </li>
+                    <li>
+                        <a href="/dashboard">Home</a>
+                    </li>
+                    <li>
+                        <a href="logout">Log Out</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
     <div class="container">
         <div class="row">
             <div class="col-xs-0 col-lg-4"></div>
             <div class="col-xs-12 col-lg-4">
                 <div class="game-section" align="center">
-                    <h2>Hole <span id="hole-number"></span></h2>
-                    <h2>Par <span id="par"></span></h2>
+                    <h2 id="hole">Hole
+                        <span id="hole-number"></span>
+                    </h2>
+                    <h2>Par
+                        <span id="par"></span>
+                    </h2>
                     <br>
-                    <h2><button class="btn btn-primary" id="minus"><span class="glyphicon glyphicon-minus"></span></button> <span id="number"></span> <button class="btn btn-primary" id="plus"><span class="glyphicon glyphicon-plus"></span></button>
-                    <br>
-                    <h3><span id="previous">< Prev</span><span id="next">Next ></span></h3>
-                    <br>
-                    <h2><span id="progress"></span></h2>
+                    <h2>
+                        <button class="btn btn-default btn-lg" id="minus">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button> 
+                        <span id="number"> </span> 
+                        <button class="btn btn-default btn-lg" id="plus">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+
+                        {{!-- <button class="btn btn-primary" id="minus">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                        <span id="number"></span>
+                        <button class="btn btn-primary" id="plus">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button> --}}
+
+                        <br>
+                        <h3>
+                            <span id="previous">< Prev</span>
+                            <span id="next" data-gameid ="{{Game.GameId}}">Next ></span>
+                        </h3>
+                        <br>
+                        <h2>
+                            <span id="progress"></span>
+                        </h2>
                 </div>
             </div>
             <div class="col-xs-0 col-lg-4"></div>
         </div>
     </div>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title" id="exampleModalLabel">Warning</h1>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" align="center" id="display">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="close-modal">Close</button>
-                </div>
-                </div>
+    <!-- Scoreboard Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Game Progress</h4>
+            </div>
+            <div class="modal-body">
+                <p id="final-score"></p>
+                <p id="total-throws"></p>  
+                <p id="par-number"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="close-modal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
             </div>
         </div>
+    </div>
     <footer>
-      <div class="footer"><h5>&copy Copyright disc-golf-scorecard 2018</h5></div>
+        <div class="footer">
+            <h5>&copy Copyright Score Keeper 2018</h5>
+        </div>
     </footer>
 
     <script type="text/javascript">
-        $(document).ready(function() {
+        $(document).ready(function () {
             var hole = 1;
             var currentHole = 0;
+            var progress = 0;
 
             var par = 3;
             $('#par').text(par);
+            $('#hole-number').text(hole);
+            $("#previous").hide();
 
             var scores = [{
                 id: 1,
-                score: 3, 
+                score: 3,
                 saved: false
             }];
 
             var $score = $('#number');
-            // var $currentHole = $('#hole-number');
 
-            var save = function() {
+            var save = function () {
                 var score = scores[currentHole];
                 var displayScore = parseInt($score.text());
-                console.log(score.score, displayScore);
-                if(!score.saved || score.score !== displayScore) {
+                var GameId = $("#next").attr("data-gameid");
+                console.log(GameId);
+
+                if (!score.saved || score.score !== displayScore) {
                     score.score = displayScore;
                     score.saved = true;
                     console.log('SAVE IT!!!');
+                    // Added gameid data attribute to next 'button' and a variable linked to that value on click
+                    $.get("/api/scoreboard/" + hole + "/" + GameId +"/"+ displayScore, function (data) {
+                        console.log("score code success")
+                   }); 
                 }
             };
 
-            var displayHole = function() {
+            var displayHole = function () {
                 $score.text(scores[currentHole].score);
             };
-            // var displayHoleNum = function() {
-            //    $currentHole.text(scores[currentHole].id);
-            // }
 
-            var changeHole = function(change) {
+            var changeHole = function (change) {
                 save();
-                
+
                 currentHole += change;
-                
-                if(currentHole < 0) {
+
+                if (currentHole < 0) {
                     currentHole = 0;
                 }
-                
+
                 console.log(currentHole);
-                if(currentHole === scores.length) {
-                    //get new hole
+                if (currentHole === scores.length) {
                     scores.push({
-                    id: scores.length,
-                    score: 3,
-                    saved: false
+                        id: scores.length,
+                        score: 3,
+                        saved: false
                     });
                 }
 
                 displayHole();
             };
 
-            var incScore = function(change) {
+            var incScore = function (change) {
                 $score.text(parseInt($score.text()) + change);
             };
 
             // Click minus -- decrease score by 1
-            $("#minus").on("click",function(event){
+            $("#minus").on("click", function (event) {
                 incScore(-1);
             });
             // Click plus -- increase score by 1
-            $("#plus").on("click",function(){
+            $("#plus").on("click", function () {
                 incScore(1);
             });
 
-            // Click next -- Send data from current hole, receive for next hole?? Or
-            //receive/send data, then show next hole
-            $("#next").on("click",function(event){
+            // Click next
+            $("#next").on("click", function (event) {
+                var GameId = $(this).attr("data-gameid");
                 $("#previous").show();
                 changeHole(1);
                 hole++;
-                if (hole > 17){
+                if (hole > 17) {
                     hole = 18;
                     $("#next").hide();
                 }
                 $("#hole-number").text(hole);
-                // var currentHole = $("#hole-number").text()
-                // var par = 3;
-                // var user = $("#number").text();
-                // var userScore = parseInt(user);
+                showProgress();
+                // Added gameid data attribute to next 'button' and a variable linked to that value on click
+                $.get("/api/hole/" + hole +"/"+GameId, function(data){
+                    console.log("hole code success")
+                });
             });
-            // Click previous -- receive/send data, then show previous hole
-            $("#previous").on("click",function(event){
+            // Click previous
+            $("#previous").on("click", function (event) {
                 $("#next").show();
                 changeHole(-1);
                 hole--;
-                if (hole < 2){
+                if (hole < 2) {
                     hole = 1;
                     $("#previous").hide();
                 }
                 $("#hole-number").text(hole);
-                // var currentHole = $("#hole-number").text()
-                // var par = 3;
-                // var user = $("#number").text();
-                // var userScore = parseInt(user);
+                showProgress();
             });
 
             displayHole();
 
-            function start (){
-                $("#hole-number").text(currentHole); 
-                $("#par").text(par);
-                $("#number").text(userScore);
-                $("#previous").hide();
-            };
+            var totalScore;
 
-            function getHoleData() {
-                // Check if hole data exists in db
-                $.get("api/hole/:id", function(data) {
-                    if(data === undefined) {
-                        addHole();
-                    }
-                    // If doesn't match, then update
-                    if (data != data) {
-                        updateHole();
-                    }
-                })  
+            function showProgress() {
+                var totalThrows = 0;
+                for(var i=0; i<scores.length; i++) {
+                    totalThrows += scores[i].score;
+                    console.log('Throws: ' + totalThrows);
+                }
+                var parNum = scores.length * 3;
+                totalScore = totalThrows - parNum;
+                console.log("Total score: " + totalScore);
+                if (totalScore === 0) {
+                    $("#progress").text('E');
+                }
+                if (totalScore > 0) {
+                    $("#progress").text('+' + totalScore);
+                }
+                if (totalScore < 0) {
+                    $("#progress").text(totalScore);
+                }
             }
 
-            function addHole() {}
+            // Display modal - displaying main user score
+            $('#myModal').on('shown.bs.modal', function() { 
+                var totalThrows = 0;
+                for(var i=0; i<scores.length; i++) {
+                    totalThrows += scores[i].score;
+                    console.log('Throws: ' + totalThrows);
+                }
+                var parNum = scores.length * 3;
+                totalScore = totalThrows - parNum;
+                parMinusTotal = parNum - totalScore
+                console.log("Total score: " + totalScore);
+                if (totalScore === 0) {
+                    $('#final-score').text('E' + '\(' + parMinusTotal + '\)');
+                }
+                if (totalScore > 0) {
+                    $("#final-score").text('+' + totalScore + '\(' + parMinusTotal + '\)');
+                }
+                if (totalScore < 0) {
+                    $("#final-score").text(totalScore + '\(' + parMinusTotal + '\)');
+                }
+                $('#total-throws').text('Total throws: ' + totalThrows);
+                $('#par-number').text('Par: ' + parNum);
 
-            function updateHole(hole) {
-                $.ajax({
-                    method: "PUT",
-                    url: "/api/hole/:id",
-                    data: hole
-                })
-            }
+            });
 
-                       
-            
         });
-        
+
     </script>
-  </body>
+</body>
+
 </html>
